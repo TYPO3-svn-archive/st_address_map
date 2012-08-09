@@ -1,0 +1,1 @@
+If you have any bugs, supports or tasks concerning my extension st_address_map please feel free to enter a new issue here: http://forge.typo3.org/projects/extension-st_address_map
