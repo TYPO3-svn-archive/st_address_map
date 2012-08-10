@@ -103,7 +103,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'].',' ;
 
 		/* ----- Ajax ----- */
-		if(t3lib_div::_GET('type') == 21580145) 		return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'),$tablefields);
+		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) 		return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'),$tablefields);
 
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/',$this->conf['dropdownfields']) as $value) {
@@ -184,7 +184,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray);
+		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray).'<div style="display:none" id="tx_staddressmap_addresslist_pageid">'.$GLOBALS["TSFE"]->id.'</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">'.$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'].'</div>';
 		return $this->pi_wrapInBaseClass($content);
 	}
 
