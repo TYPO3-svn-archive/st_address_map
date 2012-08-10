@@ -2,13 +2,15 @@ window.onload = function(){
 	initialize();
 }
 
-var siteid = window.location.search;
 $(document).ready(function() {
-	
+
+	var siteid = $('#tx_staddressmap_addresslist_pageid').html();
+	var ajaxtypenumb = $('#tx_staddressmap_addresslist_ajaxtypenumb').html();
+
 	$('.tx_staddressmap_select').change(function(){
 		var tablefield = this.id.split('_');
 		
-        $.get('index.php?type=21580145'+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
+        $.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
         	cid: 	$('#tx_staddressmap_cid').val(),
         	t: 		tablefield[3],
         	v: 		$('#'+this.id).val()
@@ -33,7 +35,7 @@ $(document).ready(function() {
 		if(e.which == 13){
 			var tablefield = this.id.split('_');
 			
-	        $.get('index.php?type=21580145'+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
+	        $.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 	        	cid: 	$('#tx_staddressmap_cid').val(),
 	        	t: 		tablefield[3],
 	        	v: 		$('#'+this.id).val()
@@ -68,7 +70,7 @@ $(document).ready(function() {
 	})
 	
 	if($('#tx_staddressmap_seeatstart').val() == 1) {
-		$.get('index.php?type=21580145'+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
+		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
         	cid: 	$('#tx_staddressmap_cid').val(),
         	t: 		'1',
         	v: 		$('#'+this.id).val(),
@@ -84,7 +86,7 @@ $(document).ready(function() {
 	if($('.tx_staddressmap_submit').length > 0) {
 		$('.tx_staddressmap_submit').click(function() {
 			tablefield = $('.tx_staddressmap_input[value!=""]').attr('id').split('_');
-			$.get('index.php?type=21580145'+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
+			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 	        	cid: 	$('#tx_staddressmap_cid').val(),
 	        	t: 		tablefield[3],
 	        	v: 		$('.tx_staddressmap_input[value!=""]').val()
