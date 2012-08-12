@@ -61,4 +61,5 @@ plugin.tx_staddressmap_pi1 {
 	searchbutton = {$plugin.tx_staddressmap_pi1.searchbutton}
 	bubblemarker = {$plugin.tx_staddressmap_pi1.bubblemarker}
 	ajaxtypenumb = {$plugin.tx_staddressmap_pi1.ajaxtypenumb}
+	ownJquery = {$plugin.tx_staddressmap_pi1.ownJquery}
 }

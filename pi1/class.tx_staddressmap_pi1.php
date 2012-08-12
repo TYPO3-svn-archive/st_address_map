@@ -57,11 +57,13 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();
 		$errormessage = '';
 
-		if (t3lib_extMgm::isLoaded('t3jquery')) require_once(t3lib_extMgm::extPath('t3jquery').'class.tx_t3jquery.php');
-		if (T3JQUERY === true) {
-			tx_t3jquery::addJqJS();
-		} else {
-			$GLOBALS['TSFE']->additionalFooterData[$extKey.'_10'] = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>';
+		if($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ownJquery'] == 0) {
+			if (t3lib_extMgm::isLoaded('t3jquery')) require_once(t3lib_extMgm::extPath('t3jquery').'class.tx_t3jquery.php');
+			if (T3JQUERY === true) {
+				tx_t3jquery::addJqJS();
+			} else {
+				$GLOBALS['TSFE']->additionalFooterData[$extKey.'_10'] = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>';
+			}
 		}
 
 		if($this->conf['fancyselect'] == 1) {

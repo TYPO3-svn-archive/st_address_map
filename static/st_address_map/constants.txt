@@ -49,6 +49,8 @@ plugin.tx_staddressmap_pi1 {
 		distance = Distance:&nbsp;|
 	}
 
+	# cat=Addressmap - Settings//0005; type=boolean; label= including own jQuery
+	ownJquery = 0
 	# cat=Addressmap - Settings//0010; type=string; label= templateFile
 	templateFile = EXT:st_address_map/static/template.html
 	# cat=Addressmap - Settings//0020; type=string; label= tablefields: You can add various other tt_address table fields to use them as markers in the templateFile (###YOURFIELD###).
