@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "st_address_map".
  *
- * Auto generated 15-11-2012 14:24
+ * Auto generated 15-11-2012 15:05
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
