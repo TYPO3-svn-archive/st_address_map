@@ -57,15 +57,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();
 		$errormessage = '';
 
-		if($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ownJquery'] == 0) {
-			if (t3lib_extMgm::isLoaded('t3jquery')) require_once(t3lib_extMgm::extPath('t3jquery').'class.tx_t3jquery.php');
-			if (T3JQUERY === true) {
-				tx_t3jquery::addJqJS();
-			} else {
-				$GLOBALS['TSFE']->additionalFooterData[$extKey.'_10'] = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>';
-			}
-		}
-
 		if($this->conf['fancyselect'] == 1) {
 			$GLOBALS['TSFE']->additionalFooterData[$extKey.'_85'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath($this->extKey).'static/selectbox/jquery.selectbox-0.1.3.min.js"></script>
 			<script type="text/javascript">
@@ -82,9 +73,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$templatefile = ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) ? ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['templateFile']) : ('EXT:st_address_map/static/template.html');
 		$this->templateHtml = $this->cObj->fileResource($templatefile);
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###TEMPLATE###');
-		$GLOBALS['TSFE']->additionalFooterData[$this->extKey.'_5']		= '<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>';
-		$GLOBALS['TSFE']->additionalFooterData[$this->extKey.'_665']	= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath($this->extKey).'static/tx_addressmap.js"></script>';
-		$GLOBALS['TSFE']->additionalHeaderData[$this->extKey.'_26']		= '<link href="'.t3lib_extMgm::siteRelPath($this->extKey).'static/style.css" rel="stylesheet" type="text/css" />';
 
 		// errorhandling
 		foreach ($this->cObj->data['pi_flexform']['data']['sDEF']['lDEF'] as $key => $value) {
@@ -338,7 +326,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 						if($tvalue == 'email') {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a',"'",'"'), array("tx_addressmap_replace","|-|","-|-"), $this->cObj->mailto_makelinks('mailto:'.$row[$tvalue])),$bubblewrap);
 						} else {
-							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', $row[$tvalue]),$bubblewrap);
+							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0),$bubblewrap));
 						}
 					}
 				}
