@@ -11,7 +11,7 @@
 			<label index="tt_address.tx_staddressmap_lng">lng</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="tt_content.list_type_pi1">Address visualization with Google Maps and tt_address</label>
+			<label index="tt_content.list_type_pi1">Adressenvisualisierung mit Google Maps und tt_address</label>
 			<label index="tt_address.tx_staddressmap_lat">lat</label>
 			<label index="tt_address.tx_staddressmap_lng">lng</label>
 		</languageKey>

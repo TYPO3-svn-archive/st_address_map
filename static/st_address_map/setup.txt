@@ -1,5 +1,5 @@
 #page {
-	#includeJSFooterlibs.st_adressmap_jquery = https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
+	#includeJSFooterlibs.st_adressmap_jquery = //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
 	#includeJSFooterlibs.st_adressmap_jquery {
 	#	external = 1
 	#	disableCompression = 1

@@ -11,8 +11,8 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'Address visualization with Google Maps and tt_address',
-	'description' => '',
+	'title' => 'Address visualization with Google Maps',
+	'description' => 'With the extension st_address_map you are able to show addresses out of tt_address in Google Maps. Further it is possible to show the addresses in a list.',
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '0.2.2',
