@@ -95,10 +95,8 @@ function isStaddressmapOnCurrentPage($mode, $uid) {
 	return FALSE;
 }
 
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/powermail/lib/user_powermailOnCurrentPage.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/powermail/lib/user_powermailOnCurrentPage.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/lib/user_st_addressmapOnCurrentPage.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/st_address_map/lib/user_st_addressmapOnCurrentPage.php']);
 }
-?>
 
 ?>

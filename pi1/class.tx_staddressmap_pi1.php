@@ -97,7 +97,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/',$this->conf['dropdownfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value,'tt_address','(hidden=0 and deleted=0) and pid = '.$addresslist.'',$groupBy = $value,$orderBy = $value,$limit = '');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('hidden,deleted,'. $value,'tt_address','(pid = '.$addresslist.') AND (hidden=0 AND deleted=0)',$groupBy = $value,$orderBy = $value,$limit = '');
 			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 				$option = '<select class="tx_staddressmap_select" id="tx_staddressmap_select_'.$value.'"><option value="-1">'.$this->pi_getLL('please_select').'</option>';
 				foreach($res as $row) {
@@ -112,7 +112,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		/* ----- inputfields ----- */
 		foreach (preg_split('/\s?,\s?/',$this->conf['inputfields']) as $value) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value,'tt_address','(hidden=0 and deleted=0)',$groupBy = $value,$orderBy = $value,$limit = '');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($value,'tt_address','hidden=0 AND deleted=0',$groupBy = $value,$orderBy = $value,$limit = '');
 			if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 				foreach($res as $row) {
 					$option = '<input class="tx_staddressmap_input" id="tx_staddressmap_input_'.$value.'" value="" />';
@@ -245,7 +245,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng,
 				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['1'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['1'].')) * cos(RADIANS('.$koord['0'].') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
 				'tt_address',
-				'(hidden=0 and deleted=0) and (pid = '.$addresslist.') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['1'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['1'].')) * cos(RADIANS('.$koord['0'].') -  RADIANS(tx_staddressmap_lng))) <= '.$rad,
+				'(hidden=0 AND deleted=0) AND (pid = '.$addresslist.') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['1'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['1'].')) * cos(RADIANS('.$koord['0'].') -  RADIANS(tx_staddressmap_lng))) <= '.$rad,
 				$groupBy = '',
 				$orderBy = 'EAdvanced',
 				$limit = ''
@@ -280,10 +280,10 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
 			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng',
+			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
+				'uid, '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
-				'(hidden=0 and deleted=0) and pid = '.$addresslist,
+				'(hidden=0 and deleted=0) and (pid = '.$addresslist.')',
 				$groupBy = '',
 				$orderBy = t3lib_div::_GET('order'),
 				$limit = ''

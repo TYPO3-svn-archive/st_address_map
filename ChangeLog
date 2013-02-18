@@ -1,3 +1,11 @@
+2013-02-13 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
+	- 0.3.0
+
+	* removed error - No thumbnails in the backend http://forge.typo3.org/issues/45465
+	* add docu
+	* set depends now on TYPO3 and tt_address
+	* bugfixed mysql query
+
 2012-11-15 Thomas Scheibitz  <mail@kreativschmiede-eichsfeld.de>
 	- 0.2.2
 
