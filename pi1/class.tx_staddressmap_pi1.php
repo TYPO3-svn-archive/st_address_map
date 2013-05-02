@@ -183,37 +183,27 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	}
 
 
+	/**
+	 * Get geo coordinates from address
+	 *
+	 * @param string $data
+	 * @return array lat, lng
+	 */
 
-	private function gimmeCoordinates($useCurl = 0, $city = '',$address = '',$country = '') {
-		$request_url = 'http://maps.google.com/maps/geo?output=xml&oe=utf8&q='.urlencode($city.','.$address.','.$country);
-		if($useCurl == 1) {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $request_url);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$request_url = curl_exec($ch);
-			curl_close($ch);
-			$xml = simplexml_load_string($request_url) or die($this->pi_getLL('error_google'));
+	function getMapsCoordinates($data){
+		$json = t3lib_div::getUrl('https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=de&address=' . urlencode($data));
+		$jsonDecoded = json_decode($json, true);
+		if (!empty($jsonDecoded['results'])) {
+			$lat = $jsonDecoded['results']['0']['geometry']['location']['lat'];
+			$lng = $jsonDecoded['results']['0']['geometry']['location']['lng'];
 		} else {
-			$xml = simplexml_load_file($request_url) or die($this->pi_getLL('error_google'));
+			$lat = 0;
+			$lng = 0;
 		}
-
-		$status = $xml->Response->Status->code;
-		if (strcmp($status, "200") == 0) {
-			$s_coordinates 	= $xml->Response->Placemark->Point->coordinates;
-			$s_state 		= $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->AdministrativeAreaName;
-			$c_country		= $xml->Response->Placemark->AddressDetails->Country->CountryName;
-			return $s_coordinates.'|'.$s_state.'|'.$c_country;
-		} else if (strcmp($status, "620") == 0) {
-			return $this->pi_getLL('error_spam');
-		} else {
-			return $address.'<br />'.$city.'<br />'.$country.'<br />'.$this->pi_getLL('error_place');
-		}
+		return array($lat, $lng);
 	}
 
-
 	private function gimmeData($var, $cid, $what, $tablefields) {
-		$useCurl = $GLOBALS['TYPO3_CONF_VARS']['SYS']['curlUse'];
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
@@ -239,7 +229,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		if(in_array($what, preg_split('/\s?,\s?/',$this->conf['radiusfields']))) {
 			// radius
 			$rc = ($this->conf['radiuscountry']) ? ','.$this->conf['radiuscountry'] : '' ;
-			$koord = explode(',', reset(explode('|', $this->gimmeCoordinates($useCurl, t3lib_div::_GET('v').$rc))));
+			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v').$rc))));
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng,
@@ -268,9 +258,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			}
 		} else {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,'.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng',
+				'uid,' . $tablefields . ' tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
-				'(hidden=0 and deleted=0) and (pid = '.$addresslist.') and '.$what.' like "'.$var.'%"',
+				'(hidden=0 and deleted=0) and (pid = ' . $addresslist . ') and ' . $what . ' like "' . $var . '%"',
 				$groupBy = '',
 				$orderBy = '',
 				$limit = ''
@@ -299,34 +289,29 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$js_output .= 'var a = new Array();'."\n";
 
 			foreach($res as $key => $row) {
-
-				if(strlen(trim($row['tx_staddressmap_lat'])) == 0 || strlen(trim($row['tx_staddressmap_lng'])) == 0) {
-					$newkoord = $this->gimmeCoordinates($useCurl, $row['city'],$row['address'],$row['country']);
-					$coordinatesSplit = explode(",", $newkoord);
+				if($row['tx_staddressmap_lat'] == 0 || $row['tx_staddressmap_lng'] == 0) {
+					$newkoord = $this->getMapsCoordinates($row['zip'] . ' ' . $row['city'] . ',' . $row['address'] . ',' . $row['country']);
 					$koor_update = array();
-					$koor_update['tx_staddressmap_lat'] = $coordinatesSplit[1];
-					$koor_update['tx_staddressmap_lng'] = $coordinatesSplit[0];
-
+					$koor_update['tx_staddressmap_lat'] = $newkoord[0];
+					$koor_update['tx_staddressmap_lng'] = $newkoord[1];
 					$insert_q = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 						'tt_address',
-						'uid = '.$row['uid'],
+						'uid = ' . $row['uid'],
 						$koor_update
 					);
-
 				}
 
 				// begin js
-				$js_output .= 'a['.$ji.'] = new Object();'."\n";
+				$js_output .= 'a[' . $ji . '] = new Object();'."\n";
 				// begin bubbletext
 				$bubbletext = '';
-				foreach (preg_split('/\s?,\s?/',$this->conf['bubblefields']) as $tvalue) {
-
+				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
 					if($row[$tvalue]) {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
 						if($tvalue == 'email') {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a',"'",'"'), array("tx_addressmap_replace","|-|","-|-"), $this->cObj->mailto_makelinks('mailto:'.$row[$tvalue])),$bubblewrap);
 						} else {
-							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0),$bubblewrap));
+							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0)), $bubblewrap);
 						}
 					}
 				}
@@ -335,9 +320,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				foreach (preg_split('/\s?,\s?/',$tablefields) as $tvalue) {
 					if($row[$tvalue]) {
 						$listwrap = $this->conf['listlayout.'][$tvalue] ? $this->conf['listlayout.'][$tvalue] : '|';
-						$markerArray['###'.strtoupper($tvalue).'###'] = t3lib_TStemplate::wrap(nl2br($row[$tvalue]),$listwrap);
+						$markerArray['###' . strtoupper($tvalue) . '###'] = t3lib_TStemplate::wrap(nl2br($row[$tvalue]), $listwrap);
 					} else {
-						$markerArray['###'.strtoupper($tvalue).'###'] = '';
+						$markerArray['###' . strtoupper($tvalue) . '###'] = '';
 					}
 				}
 
