@@ -306,13 +306,12 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				// begin bubbletext
 				$bubbletext = '';
 				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
-
 					if($row[$tvalue]) {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
 						if($tvalue == 'email') {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a',"'",'"'), array("tx_addressmap_replace","|-|","-|-"), $this->cObj->mailto_makelinks('mailto:'.$row[$tvalue])),$bubblewrap);
 						} else {
-							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0),$bubblewrap));
+							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0)), $bubblewrap);
 						}
 					}
 				}
