@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "st_address_map".
  *
- * Auto generated 03-05-2013 00:37
+ * Auto generated 03-05-2013 00:41
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'With the extension st_address_map you are able to show addresses out of tt_address in Google Maps. Further it is possible to show the addresses in a list.',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '0.3.2',
+	'version' => '0.3.3',
 	'dependencies' => 'tt_address',
 	'conflicts' => '',
 	'priority' => '',
