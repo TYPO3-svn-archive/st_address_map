@@ -60,13 +60,15 @@ plugin.tx_staddressmap_pi1 {
 	# cat=Addressmap - Settings//0030; type=string; label= bubblefields: Add the tt_address table fields, which shall be shown in the bubble.
 	bubblefields =  name, address, zip, city, phone, www
 	# cat=Addressmap - Settings//0040; type=string; label= dropdownfields
-	dropdownfields = city, region
+	dropdownfields = city, region, radiusselect
 	# cat=Addressmap - Settings//0050; type=string; label= inputfields
 	inputfields = zip
 	# cat=Addressmap - Settings//0060; type=string; label= radiusfields: The field in which you want to search for.
 	radiusfields = zip
 	# cat=Addressmap - Settings//0070; type=int+; label= searchradius: Distance in kilometers
 	searchradius = 10
+	# cat=Addressmap - Settings//0077; type=int+; label= searchradius FE: Distance in kilometers
+    searchradiusfe = 10,50,100,200,500,800,1000
 	# cat=Addressmap - Settings//0080; type=string; label= radiuscountry
 	radiuscountry = Deutschland
 	# cat=Addressmap - Settings//0090; type=boolean; label= circle

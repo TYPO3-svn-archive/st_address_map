@@ -8,6 +8,12 @@ $(document).ready(function() {
 	var ajaxtypenumb = $('#tx_staddressmap_addresslist_ajaxtypenumb').html();
 
 	$('.tx_staddressmap_select').change(function(){
+
+		// if select radius -> return
+		if($(this).prop('id') == 'tx_staddressmap_select_radiusselect') {
+			return;
+		}
+
 		var tablefield = this.id.split('_');
 
 		$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
@@ -89,20 +95,21 @@ $(document).ready(function() {
 			$.get('index.php?id='+siteid+'&type='+ajaxtypenumb+'&ts='+Date.parse(new Date()) + new Date().getMilliseconds(),{
 				cid: 	$('#tx_staddressmap_cid').val(),
 				t: 		tablefield[3],
-				v: 		$('.tx_staddressmap_input[value!=""]').val()
+				v: 		$('.tx_staddressmap_input[value!=""]').val(),
+				rad:	$('#tx_staddressmap_select_radiusselect').val()
 			},
 			function(data){
 				$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
 				show_marker(0);
 			}); 
 
-			$('.tx_staddressmap_select').not(this).each(
+			$('.tx_staddressmap_select').not(this).not('#tx_staddressmap_select_radiusselect').each(
 				function(index,element) {
 					element.selectedIndex = 0;
 				}
 			);
 
-			$('.tx_staddressmap_select').each(
+			$('.tx_staddressmap_select').not('#tx_staddressmap_select_radiusselect').each(
 				function(index,element) {
 					element.selectedIndex = 0;
 				}
