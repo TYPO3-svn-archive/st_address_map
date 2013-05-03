@@ -64,7 +64,7 @@ plugin.tx_staddressmap_pi1 {
 	# cat=Addressmap - Settings//0050; type=string; label= inputfields
 	inputfields = zip
 	# cat=Addressmap - Settings//0060; type=string; label= radiusfields: The field in which you want to search for.
-	radiusfields =
+	radiusfields = zip
 	# cat=Addressmap - Settings//0070; type=int+; label= searchradius: Distance in kilometers
 	searchradius = 10
 	# cat=Addressmap - Settings//0080; type=string; label= radiuscountry
