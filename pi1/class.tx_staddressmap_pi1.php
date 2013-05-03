@@ -93,7 +93,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'].',' ;
 
 		/* ----- Ajax ----- */
-		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) 		return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'),$tablefields);
+		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) {
+			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'),$tablefields);
+		}
 
 		/* ----- selectfields ----- */
 		foreach (preg_split('/\s?,\s?/',$this->conf['dropdownfields']) as $value) {
@@ -207,9 +209,10 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
-		$singlerow=$this->cObj->getSubpart($subpart,'###ROW###');
+		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform','tt_content','(hidden=0 and deleted=0) and uid='.$cid,$groupBy = '',$orderBy = '',$limit = '');
+		// check flexform
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('pi_flexform','tt_content','(hidden=0 and deleted=0) and uid=' . $cid, $groupBy = '', $orderBy = '', $limit = '');
 		if($res && $GLOBALS['TYPO3_DB']->sql_affected_rows($res) != 0) {
 			while($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$flexform	= t3lib_div::xml2array($row['pi_flexform']);
@@ -221,15 +224,16 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		foreach ($flexform['data']['sDEF']['lDEF'] as $key => $value) { $$key = reset($value); }
 		$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
 		#// set addresslist
-		$addresslist = explode(',',$addresslist);
+		$addresslist = explode(',', $addresslist);
 		$addresslist = implode(' or pid = ',$addresslist);
 
 		// radius
 		$js_circle = 'circledata = null;';
 		if(in_array($what, preg_split('/\s?,\s?/',$this->conf['radiusfields']))) {
 			// radius
-			$rc = ($this->conf['radiuscountry']) ? ','.$this->conf['radiuscountry'] : '' ;
-			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v').$rc))));
+			$rc = ($this->conf['radiuscountry']) ? ',' . $this->conf['radiuscountry'] : '' ;
+			$koord = explode(',', reset(explode('|', $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc))));
+			#$koord = $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc);
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng,
