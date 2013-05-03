@@ -310,6 +310,11 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
 						if($tvalue == 'email') {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace(array('<a',"'",'"'), array("tx_addressmap_replace","|-|","-|-"), $this->cObj->mailto_makelinks('mailto:'.$row[$tvalue])),$bubblewrap);
+						} elseif ($tvalue == 'www') {
+							$conf = array();
+							$conf['parameter'] = $row[$tvalue];
+							$linktext = explode(' ', $row[$tvalue]);
+							$bubbletext .= t3lib_TStemplate::wrap($this->cObj->typolink($linktext[0],$conf),$bubblewrap);
 						} else {
 							$bubbletext .= t3lib_TStemplate::wrap(str_replace("\r\n", '<br />', htmlentities($row[$tvalue],ENT_COMPAT,'UTF-8',0)), $bubblewrap);
 						}
