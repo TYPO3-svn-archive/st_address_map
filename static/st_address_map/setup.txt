@@ -45,6 +45,7 @@ plugin.tx_staddressmap_pi1 {
 		phone = {$plugin.tx_staddressmap_pi1.bubblelayout.phone}
 		email = {$plugin.tx_staddressmap_pi1.bubblelayout.email}
 		description = {$plugin.tx_staddressmap_pi1.bubblelayout.description}
+		www = {$plugin.tx_staddressmap_pi1.bubblelayout.www}
 	}
 
 	listlayout {

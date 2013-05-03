@@ -305,7 +305,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				$js_output .= 'a[' . $ji . '] = new Object();'."\n";
 				// begin bubbletext
 				$bubbletext = '';
-				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields']) as $tvalue) {
+				foreach (preg_split('/\s?,\s?/', $this->conf['bubblefields'], -1) as $tvalue) {
 					if($row[$tvalue]) {
 						$bubblewrap = $this->conf['bubblelayout.'][$tvalue] ? $this->conf['bubblelayout.'][$tvalue] : '|';
 						if($tvalue == 'email') {
