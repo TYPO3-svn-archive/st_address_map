@@ -165,6 +165,7 @@ function createMarker(name, latlng){
 		if (infowindow)
 			infowindow.close();
 		infowindow = new google.maps.InfoWindow({
+			maxWidth: 500,
 			content: name
 		});
 		infowindow.open(map, marker);
