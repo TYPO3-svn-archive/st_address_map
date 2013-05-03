@@ -89,7 +89,6 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		$addresslist = implode(' or pid = ',$addresslist);
 
 		$content_id 		= $this->cObj->data['uid'];
-		$layout_style		= $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['list_style'];
 		$tablefields = ($this->conf['tablefields'] == '') ? '' : $this->conf['tablefields'].',' ;
 
 		/* ----- Ajax ----- */
@@ -152,31 +151,31 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			var region_marker = new Array();
 			var region_centerpoints = new Array();
 			var region_detailzoom = new Array();
-			'.$bubblemarker.'
+			' . $bubblemarker . '
 			
 				function initialize(){
-				var latlng = new google.maps.LatLng('.$center_coordinates.');
-				var myMap_'.$content_id.' = {
-					zoom: '.$start_zoom.',
+				var latlng = new google.maps.LatLng(' . $center_coordinates . ');
+				var myMap_' . $content_id . ' = {
+					zoom: ' . $start_zoom . ',
 					center: latlng,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
-				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_'.$content_id.'"), myMap_'.$content_id.');
+				map = new google.maps.Map(document.getElementById("tx_staddressmap_gmap_' . $content_id . '"), myMap_' . $content_id . ');
 			}
 			
 	        </script>';
 
 		$markerArray['###MAPS###'] = $maps;
-		$markerArray['###ADDRESSLIST###'] = '<div id="tx_staddressmap_addresslist_'.$content_id.'" class="tx_staddressmap_addresslist"></div>';
+		$markerArray['###ADDRESSLIST###'] = '<div id="tx_staddressmap_addresslist_' . $content_id . '" class="tx_staddressmap_addresslist"></div>';
 
 		if($this->conf['searchbutton'] == 1) {
-			$markerArray['###SEARCHBUTTON###'] = '<input class="tx_staddressmap_submit" type="submit" value="'.$this->pi_getLL('search').'" />';
+			$markerArray['###SEARCHBUTTON###'] = '<input class="tx_staddressmap_submit" type="submit" value="' . $this->pi_getLL('search') . '" />';
 		} else {
 			$markerArray['###SEARCHBUTTON###'] = '';
 		}
 
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray).'<div style="display:none" id="tx_staddressmap_addresslist_pageid">'.$GLOBALS["TSFE"]->id.'</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">'.$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'].'</div>';
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray).'<div style="display:none" id="tx_staddressmap_addresslist_pageid">' . $GLOBALS["TSFE"]->id.'</div><div style="display:none" id="tx_staddressmap_addresslist_ajaxtypenumb">' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb'] . '</div>';
 		return $this->pi_wrapInBaseClass($content);
 	}
 

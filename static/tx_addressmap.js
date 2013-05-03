@@ -61,7 +61,7 @@ $(document).ready(function() {
 	});
 	
 	$('.tx_staddressmap_input').focus(function() {
-		$('.tx_staddressmap_input').not(this).val('');	
+		$('.tx_staddressmap_input').not(this).val('');
 		$('.tx_staddressmap_select').each(
 			function(index,element) {
 				element.selectedIndex = 0;
@@ -75,7 +75,7 @@ $(document).ready(function() {
 			t: 		'1',
 			v: 		$('#'+this.id).val(),
 			all:	1,
-			order: $('#tx_staddressmap_order').val(),
+			order: $('#tx_staddressmap_order').val()
 		},
 		function(data){
 			$('#tx_staddressmap_addresslist_'+$('#tx_staddressmap_cid').val()).html(data);
