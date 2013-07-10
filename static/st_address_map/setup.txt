@@ -33,6 +33,67 @@ st_address_map_ajax  {
 }
 
 plugin.tx_staddressmap_pi1 {
+
+	listlayout {
+
+		company = TEXT
+		company {
+			field = outputfield
+			wrap = <p>| 1</p>
+		}
+
+		first_name = TEXT
+		first_name {
+			field = outputfield
+			wrap = {$plugin.tx_staddressmap_pi1.listlayout.first_name}
+		}
+
+		last_name < .first_name
+		last_name.wrap = {$plugin.tx_staddressmap_pi1.listlayout.last_name}
+
+		address < .first_name
+		address.wrap = {$plugin.tx_staddressmap_pi1.listlayout.address}
+
+		zip < .first_name
+		zip.wrap = {$plugin.tx_staddressmap_pi1.listlayout.zip}
+
+		city < .first_name
+		city.wrap = {$plugin.tx_staddressmap_pi1.listlayout.city}
+
+		region < .first_name
+		region.wrap = {$plugin.tx_staddressmap_pi1.listlayout.region}
+
+		country < .first_name
+		country.wrap = {$plugin.tx_staddressmap_pi1.listlayout.country}
+
+		phone < .first_name
+		phone.wrap = {$plugin.tx_staddressmap_pi1.listlayout.phone}
+
+		email < .first_name
+		email {
+			wrap = {$plugin.tx_staddressmap_pi1.listlayout.email}
+			typolink.parameter.field = outputfield
+		}
+
+		description < .first_name
+		description.wrap = {$plugin.tx_staddressmap_pi1.listlayout.description}
+
+		www = TEXT
+		www {
+			wrap = {$plugin.tx_staddressmap_pi1.listlayout.www}
+			field = outputfield
+			typolink.parameter.stdWrap.cObject = COA
+			typolink.parameter.stdWrap.cObject {
+				10 = TEXT
+				10.value = http://
+
+				20 = TEXT
+				20.field = outputfield
+			}
+		}
+	}
+
+
 	bubblelayout {
 		wrap = {$plugin.tx_staddressmap_pi1.bubblelayout.wrap}
 		name = {$plugin.tx_staddressmap_pi1.bubblelayout.name}
@@ -46,20 +107,6 @@ plugin.tx_staddressmap_pi1 {
 		email = {$plugin.tx_staddressmap_pi1.bubblelayout.email}
 		description = {$plugin.tx_staddressmap_pi1.bubblelayout.description}
 		www = {$plugin.tx_staddressmap_pi1.bubblelayout.www}
-	}
-
-	listlayout {
-		name = {$plugin.tx_staddressmap_pi1.listlayout.name}
-		last_name = {$plugin.tx_staddressmap_pi1.listlayout.last_name}
-		address = {$plugin.tx_staddressmap_pi1.listlayout.address}
-		zip = {$plugin.tx_staddressmap_pi1.listlayout.zip}
-		city = {$plugin.tx_staddressmap_pi1.listlayout.city}
-		region = {$plugin.tx_staddressmap_pi1.listlayout.region}
-		country = {$plugin.tx_staddressmap_pi1.listlayout.country}
-		phone = {$plugin.tx_staddressmap_pi1.listlayout.phone}
-		email = {$plugin.tx_staddressmap_pi1.listlayout.email}
-		description = {$plugin.tx_staddressmap_pi1.listlayout.description}
-		distance = {$plugin.tx_staddressmap_pi1.listlayout.distance}
 	}
 
 	templateFile = {$plugin.tx_staddressmap_pi1.templateFile}

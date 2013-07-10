@@ -28,9 +28,9 @@ plugin.tx_staddressmap_pi1 {
 
 	listlayout {
 		# cat=Addressmap - Listlayout//0010; type=wrap; label= nameWrap
-		name = |
+		first_name = <b>|
 		# cat=Addressmap - Listlayout//0020; type=wrap; label= lastnameWrap
-		last_name = |
+		last_name = |</b>
 		# cat=Addressmap - Listlayout//0030; type=wrap; label= addressWrap
 		address = |<br />
 		# cat=Addressmap - Listlayout//0040; type=wrap; label= zipWrap
@@ -44,9 +44,11 @@ plugin.tx_staddressmap_pi1 {
 		# cat=Addressmap - Listlayout//0080; type=wrap; label= phoneWrap
 		phone = Phone: |<br />
 		# cat=Addressmap - Listlayout//0090; type=wrap; label= emailWrap
-		email = |
+		email = E-Mail: |<br />
+		# cat=Addressmap - Listlayout//0095; type=wrap; label= WebsiteWrap
+		www = Website: |<br />
 		# cat=Addressmap - Listlayout//0100; type=wrap; label= descriptionWrap
-		description = Description:<br />|<br />
+		description = <p><i>Description:</i><br />|</p>
 		# cat=Addressmap - Listlayout//0110; type=wrap; label= distanceWrap
 		distance = Distance:&nbsp;|
 	}
@@ -56,7 +58,7 @@ plugin.tx_staddressmap_pi1 {
 	# cat=Addressmap - Settings//0010; type=string; label= templateFile
 	templateFile = EXT:st_address_map/static/template.html
 	# cat=Addressmap - Settings//0020; type=string; label= tablefields: You can add various other tt_address table fields to use them as markers in the templateFile (###YOURFIELD###).
-	tablefields =  first_name, last_name, phone, address, zip, city, region, country, description, www
+	tablefields =  first_name, last_name, phone, address, zip, city, region, country, description, email, www
 	# cat=Addressmap - Settings//0030; type=string; label= bubblefields: Add the tt_address table fields, which shall be shown in the bubble.
 	bubblefields =  name, address, zip, city, phone, www
 	# cat=Addressmap - Settings//0040; type=string; label= dropdownfields

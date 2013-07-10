@@ -93,7 +93,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		/* ----- Ajax ----- */
 		if(t3lib_div::_GET('type') == $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.']['ajaxtypenumb']) {
-			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), $tablefields, t3lib_div::_GET('rad'));
+			return $this->gimmeData(t3lib_div::_GET('v'), t3lib_div::_GET('cid'), t3lib_div::_GET('t'), t3lib_div::_GET('rad'));
 		}
 
 		/* ----- selectfields ----- */
@@ -146,7 +146,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		# ----- Mapsjavascript -----
 
 		$bubblemarker = ($this->conf['bubblemarker']) ? 'var icon = "'.$this->conf['bubblemarker'].'";' : 'var icon = "";' ;
-		$GLOBALS['TSFE']->additionalFooterData[$this->extKey.'_665_'.$content_id]	= '
+		$GLOBALS['TSFE']->additionalFooterData[$this->extKey.'_665_'.$content_id] = '
 			<script type="text/javascript">
 			
 			var map;
@@ -203,7 +203,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 	 * @return array lat, lng
 	 */
 
-	function getMapsCoordinates($data){
+	protected function getMapsCoordinates($data){
 		$json = t3lib_div::getUrl('https://maps.googleapis.com/maps/api/geocode/json?sensor=false&region=de&address=' . urlencode($data));
 		$jsonDecoded = json_decode($json, true);
 		if (!empty($jsonDecoded['results'])) {
@@ -216,8 +216,10 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		return array($lat, $lng);
 	}
 
-	private function gimmeData($var, $cid, $what, $tablefields, $rad=20000) {
-		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_staddressmap_pi1.'];
+	protected function gimmeData($var, $cid, $what, $rad=20000) {
+
+		$tablefields = $this->conf['tablefields'];
+		$searchradius = $this->conf['searchradius'];
 
 		$subpart = $this->cObj->getSubpart($this->templateHtml, '###ADDRESSLISTS###');
 		$singlerow=$this->cObj->getSubpart($subpart, '###ROW###');
@@ -237,7 +239,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 		}
 
 		if(!$rad || $rad == -1) {
-			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
+			$rad = ($searchradius or $searchradius != 0) ? $searchradius : '20000' ;
 		}
 		// set addresslist
 		$addresslist = explode(',', $addresslist);
@@ -251,7 +253,7 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 			$koord = $this->getMapsCoordinates(t3lib_div::_GET('v') . $rc);
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'uid,  '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng,
+				'uid,  '.$tablefields.', tx_staddressmap_lat, tx_staddressmap_lng,
 				6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['0'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['0'].')) * cos(RADIANS('.$koord['1'].') -  RADIANS(tx_staddressmap_lng))) AS EAdvanced',
 				'tt_address',
 				'(hidden=0 AND deleted=0) AND (pid = '.$addresslist.') AND 6378.388 * acos(sin(RADIANS(tx_staddressmap_lat)) * sin(RADIANS('.$koord['0'].')) + cos(RADIANS(tx_staddressmap_lat)) * cos(RADIANS('.$koord['0'].')) * cos(RADIANS('.$koord['1'].') -  RADIANS(tx_staddressmap_lng))) <= '.$rad,
@@ -288,9 +290,9 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 
 		// see all
 		if(t3lib_div::_GET('all') == 1) {
-			$rad = ($this->conf['searchradius'] or $this->conf['searchradius'] != 0) ? $this->conf['searchradius'] : '20000' ;
+			$rad = ($searchradius or $searchradius != 0) ? $searchradius : '20000' ;
 			$res = $GLOBALS['TYPO3_DB']->exec_selectgetRows(
-				'uid, '.$tablefields.' tx_staddressmap_lat, tx_staddressmap_lng',
+				'uid, '.$tablefields.', tx_staddressmap_lat, tx_staddressmap_lng',
 				'tt_address',
 				'(hidden=0 and deleted=0) and (pid = '.$addresslist.')',
 				$groupBy = '',
@@ -343,14 +345,17 @@ class tx_staddressmap_pi1 extends tslib_pibase {
 				// list
 				foreach (preg_split('/\s?,\s?/', $tablefields) as $tvalue) {
 					if($row[$tvalue]) {
-						$listwrap = $this->conf['listlayout.'][$tvalue] ? $this->conf['listlayout.'][$tvalue] : '|';
-						$markerArray['###' . strtoupper($tvalue) . '###'] = t3lib_TStemplate::wrap(nl2br($row[$tvalue]), $listwrap);
+						$valconf = array(
+							'outputfield' => nl2br($row[$tvalue])
+						);
+						$this->cObj->start($valconf);
+						$markerArray['###' . strtoupper($tvalue) . '###'] = $this->cObj->cObjGetSingle($this->conf['listlayout.'][$tvalue], $this->conf['listlayout.'][$tvalue . '.']);
 					} else {
 						$markerArray['###' . strtoupper($tvalue) . '###'] = '';
 					}
 				}
 
-				$bubbletext = t3lib_TStemplate::wrap($bubbletext,$this->conf['bubblelayout.']['wrap']);
+				$bubbletext = t3lib_TStemplate::wrap($bubbletext, $this->conf['bubblelayout.']['wrap']);
 				$js_output .= 'a[' . $ji . '].name = \'' . $bubbletext . '\'' . "\n";
 				$js_output .= 'a[' . $ji . '].lat = ' . $row['tx_staddressmap_lat'] . ';' . "\n";
 				$js_output .= 'a[' . $ji . '].lng = ' . $row['tx_staddressmap_lng'] . ';' . "\n";
